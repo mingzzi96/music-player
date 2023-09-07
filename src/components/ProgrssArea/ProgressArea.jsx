@@ -31,6 +31,12 @@ function ProgressArea(props, ref) {
         const seconds =`0${parseInt(time%60)}`;
         return `${minute}:${seconds.slice(-2)}`; // 한자리 숫자일때 앞에 0을 붙여주기 위함
     }
+    const onClickProgress = (event) => {
+        const progressBarWidth = event.currentTarget.clientWidth; // progress bar의 너비 가져옴
+        const offsetX = event.nativeEvent.offsetX; // 클릭된 위치값 가져온다
+        const duration = audio.current.duration;
+        audio.current.currentTime = (offsetX/progressBarWidth) * duration;
+    }
     const onTimeUpdate = (event) => {
         if(event.target.readyState === 0){
             // 음악이 재생될 준비가 되지 않았다면 Return
@@ -45,7 +51,7 @@ function ProgressArea(props, ref) {
     }
 
     return (
-        <div className="progress-area">
+        <div className="progress-area" onMouseDown={onClickProgress}>
             <div className="progress-bar" ref={progressBar}>
                 <audio
                     autoPlay
